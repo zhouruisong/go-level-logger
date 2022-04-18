@@ -5,14 +5,14 @@ import (
 	"io"
 	"log"
 	"os"
-	"sync"
-	"time"
 	"path/filepath"
 	"runtime"
+	"sync"
+	"time"
 )
 
 const (
-	LogLevelDebug   = iota
+	LogLevelDebug = iota
 	LogLevelInfo
 	LogLevelNotice
 	LogLevelWarning
@@ -28,7 +28,7 @@ const (
 )
 
 const (
-	LogTimeFormat = "2006-01-02 15:04:05:123.000"
+	LogTimeFormat = "2006-01-02 15:04:05.9999"
 )
 
 var (
@@ -177,21 +177,27 @@ func Fatalln(v ...interface{}) {
 }
 
 func logPrint(logger *log.Logger, level string, v ...interface{}) {
-	currtime := time.Now().Format(LogTimeFormat)
+	var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
+	utcTime := time.Now().In(cstSh)
+	currtime := utcTime.Format(LogTimeFormat)
 	fileinfo := fileline()
 	newV := append([]interface{}{currtime, fileinfo, level}, v...)
 	logger.Print(newV)
 }
 
 func logPrintf(logger *log.Logger, level string, format string, v ...interface{}) {
-	currtime := time.Now().Format(LogTimeFormat)
+	var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
+	utcTime := time.Now().In(cstSh)
+	currtime := utcTime.Format(LogTimeFormat)
 	fileinfo := fileline()
 	newV := append([]interface{}{currtime, fileinfo, level}, fmt.Sprintf(format, v...))
 	logger.Println(newV)
 }
 
 func logPrintln(logger *log.Logger, level string, v ...interface{}) {
-	currtime := time.Now().Format(LogTimeFormat)
+	var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
+	utcTime := time.Now().In(cstSh)
+	currtime := utcTime.Format(LogTimeFormat)
 	fileinfo := fileline()
 	newV := append([]interface{}{currtime, fileinfo, level}, v...)
 	logger.Println(newV)
